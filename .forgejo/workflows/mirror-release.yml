@@ -1,0 +1,59 @@
+name: Mirror Release to GitHub
+on:
+  release:
+    types: [published]
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create GitHub Release and get Release ID
+        id: create_release
+        run: |
+          # GITHUB REPO: hardcoded as nixtrillo-dev
+          RELEASE_DATA=$(curl -s -X POST \
+            -H "Authorization: token ${{ secrets.GH_MIRROR_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/nixtrillo-dev/vidsorter/releases \
+            -d '{
+              "tag_name": "${{ github.event.release.tag_name }}",
+              "name": "${{ github.event.release.name }}",
+              "body": ${{ toJSON(github.event.release.body) }},
+              "draft": ${{ github.event.release.draft }},
+              "prerelease": ${{ github.event.release.prerelease }}
+            }')
+          RELEASE_ID=$(echo "$RELEASE_DATA" | jq -r '.id')
+          echo "release_id=$RELEASE_ID" >> $GITHUB_OUTPUT
+
+      - name: Download Assets from Forgejo
+        run: |
+          mkdir -p ./dist
+          
+          ASSETS_JSON=$(curl -sS -H "Authorization: token ${{ secrets.FORGEJO_TOKEN }}" \
+            "${{ secrets.FORGEJO_INSTANCE_URL }}/api/v1/repos/${{ github.repository }}/releases/tags/${{ github.event.release.tag_name }}")
+          
+          echo "$ASSETS_JSON" | jq -r '.assets // [] | .[] | "\(.name) \(.browser_download_url)"' | while read -r name url; do
+            echo "Downloading $name from $url"
+            curl -sS -L -o "./dist/$name" "$url"
+          done
+
+      - name: Upload Assets to GitHub
+        run: |
+          RELEASE_ID="${{ steps.create_release.outputs.release_id }}"
+          if [ -z "$(ls -A ./dist)" ]; then
+            echo "No assets found in ./dist. Nothing to upload."
+            exit 0
+          fi
+          
+          for file in ./dist/*; do
+            if [ -f "$file" ]; then
+              filename=$(basename "$file")
+              echo "Uploading $filename..."
+              
+              curl -s -X POST \
+                -H "Authorization: token ${{ secrets.GH_MIRROR_TOKEN }}" \
+                -H "Content-Type: application/octet-stream" \
+                --data-binary "@$file" \
+                "https://uploads.github.com/repos/nixtrillo-dev/vidsorter/releases/$RELEASE_ID/assets?name=$filename"
+            fi
+          done
