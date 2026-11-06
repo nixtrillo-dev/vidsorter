@@ -46,7 +46,7 @@ Paths containing spaces should be quoted. You can also run the CLI from any dire
 
 ## Use from GUI
 
-An optional QT GUI application can be downloaded via the releases section. The GUI supports Windows and most Linux distros.
+An optional QT GUI application can be downloaded via the [releases section](https://github.com/nixtrillo-dev/vidsorter/releases). The GUI supports Windows and most Linux distros.
 
 Note 1: Windows users will need to install Node seperately as per usual.
 
