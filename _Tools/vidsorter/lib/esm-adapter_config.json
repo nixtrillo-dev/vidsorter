@@ -1,0 +1,104 @@
+{
+  "$schema": "guify_my_script_config_schema.json",
+  "config": {
+    "title": "VidSorter",
+    "icon": "./assets/vidsorter-icon.png",
+    "uuid": "com.nixtrillo.vidsorter",
+    "script_alias": "esm-adapter.mjs",
+    "source_script_linux_amd64": "./esm-adapter.mjs",
+    "source_script_linux_aarch64": "./esm-adapter.mjs",
+    "source_script_windows_amd64": "./esm-adapter.mjs",
+    "source_type": "javascript",
+    "startup": "window",
+    "tray_on_minimize": false,
+    "instance_mode": "single",
+    "action_on_startup": null,
+    "default_tab_on_startup": "Sort (nxn) Videos and Playlist",
+    "close_after_startup_action": false,
+    "sudo": false,
+    "theme": {
+      "color": "auto",
+      "width": 600,
+      "height": 400
+    }
+  },
+  "main_menu": {
+    "tab_label": "Main Menu",
+    "welcome_heading_label": null,
+    "info_label": null
+  },
+  "deploy": {
+    "description": "Rename, sort, create playlists for video directories",
+    "version": "1.0.0",
+    "release_number": "1",
+    "summary": "A GUI frontend for executing commands for vidsorter",
+    "license": "MIT",
+    "maintainer": "nixtrillo",
+    "support_email": "nixtrillo.dev@gmail.com",
+    "dependencies": [
+      {
+        "pacman": [],
+        "apt": [],
+        "dnf": []
+      }
+    ]
+  },
+  "actions": [
+    {
+      "label": "Sort (nxn) Videos and Playlist",
+      "func": "runAction",
+      "execution_mode": "GUI",
+      "refresh_fields_on_tab_open": [],
+      "refresh_fields_on_completion": [],
+      "quick_launch": false,
+      "width": 600,
+      "sudo": false,
+      "exec_label": "Sort",
+      "exec_in_progress_label": "Sorting...",
+      "stop_label": "Abort",
+      "advanced_menu": false,
+      "advanced_menu_tab_title": "",
+      "fields": [
+        {
+          "name": "Action",
+          "type": "CB",
+          "data_type": "string",
+          "arg_name": "action",
+          "options": [],
+          "parameter_position": 100,
+          "default": "",
+          "advanced_menu": false,
+          "enabled": true,
+          "json_endpoints": {
+            "array_endpoint": ["getValidActions"],
+            "path_to_array": null,
+            "get_defaults_endpoint": [],
+            "path_to_default": null,
+            "get_enabled_endpoint": [],
+            "path_to_enabled": null
+          },
+          "refresh_fields_on_change": []
+        },
+        {
+          "name": "Video Directory",
+          "type": "DIR",
+          "data_type": "string",
+          "arg_name": "folderPath",
+          "parameter_position": 200,
+          "default": "",
+          "advanced_menu": false,
+          "enabled": true,
+          "json_endpoints": {
+            "array_endpoint": [],
+            "path_to_array": null,
+            "get_defaults_endpoint": [],
+            "path_to_default": null,
+            "get_enabled_endpoint": [],
+            "path_to_enabled": null
+          },
+          "refresh_fields_on_change": []
+        }
+      ]
+    }
+  ]
+}

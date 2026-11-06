@@ -1,0 +1,8 @@
+{
+  "name": "vidsorter",
+  "version": "1.0.0",
+  "description": "Sort NxM files and build m3u playlists",
+  "bin": { "vp": "bin/cli.js" },
+  "main": "lib/core.js",
+  "license": "MIT"
+}

@@ -1,0 +1,1303 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "RootGUIConfig",
+  "description": "JSON schema for guify_my_script configuration payload.",
+  "type": "object",
+  "defaultSnippets": [
+    {
+      "label": "New Root GUI Config Boilerplate",
+      "description": "Scaffolds a complete config file with default settings.",
+      "body": {
+        "config": {
+          "title": "${1:App Title}",
+          "icon": "/usr/share/icons/hicolor/256x256/apps/com.nixtrillo.guifymyscript.png",
+          "uuid": "com.$USER.${2:uuid}",
+          "script_alias": "${3:script_name}",
+          "source_script_linux_amd64": "${4:/path/to/script_linux_amd64}",
+          "source_script_linux_aarch64": "${5:/path/to/script_linux_aarch64}",
+          "source_script_windows_amd64": "${6:/path/to/script_windows_amd64.exe}",
+          "source_type": "${7|go,bash,python,javascript,powershell,rust|}",
+          "startup": "window",
+          "tray_on_minimize": false,
+          "instance_mode": "single",
+          "action_on_startup": null,
+          "default_tab_on_startup": null,
+          "close_after_startup_action": false,
+          "sudo": false,
+          "theme": {
+            "color": "auto",
+            "width": 600,
+            "height": 400
+          }
+        },
+        "main_menu": {
+          "tab_label": "Main Menu",
+          "welcome_heading_label": null,
+          "info_label": null
+        },
+        "deploy": {
+          "description": "Generated Qt GUI package staged by guify_my_script.",
+          "version": "0.0.1",
+          "release_number": "1",
+          "summary": "A GUI frontend for executing commands for ${3:script}",
+          "license": "MIT",
+          "maintainer": "gms",
+          "support_email": "maintainer@example.invalid",
+          "dependencies": [
+            {
+              "pacman": [],
+              "apt": [],
+              "dnf": []
+            }
+          ]
+        },
+        "actions": []
+      }
+    }
+  ],
+  "required": [
+    "config",
+    "main_menu",
+    "deploy",
+    "actions"
+  ],
+  "properties": {
+    "config": {
+      "$ref": "#/$defs/uiConfig"
+    },
+    "main_menu": {
+      "$ref": "#/$defs/mainMenuConfig"
+    },
+    "deploy": {
+      "$ref": "#/$defs/deployConfig"
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/uiAction"
+      }
+    }
+  },
+  "$defs": {
+    "uiConfig": {
+      "type": "object",
+      "defaultSnippets": [
+        {
+          "label": "New UIConfig Boilerplate",
+          "body": {
+            "title": "${1:App Title}",
+            "icon": "/home/$USER/Pictures/Icons/gms/com.nixtrillo.gms.png",
+            "uuid": "com.$USER.${2:uuid}",
+            "script_alias": "${3:script_name}",
+            "source_script_linux_amd64": "${4:/path/to/script_linux_amd64}",
+            "source_script_linux_aarch64": "${5:/path/to/script_linux_aarch64}",
+            "source_script_windows_amd64": "${6:/path/to/script_windows_amd64.exe}",
+            "source_type": "${7|go,bash,python,javascript,powershell,rust|}",
+            "startup": "window",
+            "tray_on_minimize": false,
+            "instance_mode": "single",
+            "action_on_startup": null,
+            "default_tab_on_startup": null,
+            "close_after_startup_action": false,
+            "sudo": false,
+            "theme": {
+              "color": "auto",
+              "width": 600,
+              "height": 400
+            }
+          }
+        }
+      ],
+      "required": [
+        "title",
+        "icon",
+        "uuid",
+        "script_alias",
+        "source_type",
+        "startup",
+        "tray_on_minimize",
+        "instance_mode",
+        "close_after_startup_action",
+        "sudo",
+        "theme"
+      ],
+      "anyOf": [
+        {
+          "required": [
+            "source_script_linux_amd64",
+            "source_script_linux_aarch64"
+          ]
+        },
+        {
+          "required": [
+            "source_script_amd64",
+            "source_script_arm64"
+          ]
+        },
+        {
+          "required": [
+            "source_script_windows_amd64"
+          ]
+        }
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "The display title of the application. Used as the window title and in package metadata."
+        },
+        "icon": {
+          "type": "string",
+          "description": "Path to the application icon. Can be an absolute path or a system icon name (e.g., 'preferences-desktop'). Used in the system tray, window, and .desktop file."
+        },
+        "uuid": {
+          "type": "string",
+          "description": "Unique identifier for the application in reverse domain notation (e.g., com.user.appname). Used for package naming and instance identification."
+        },
+        "script_alias": {
+          "type": "string",
+          "description": "Internal name for the bundled source script. Used as the filename when bundling the script in production mode."
+        },
+        "source_script_linux_amd64": {
+          "type": "string",
+          "description": "Path to the source script for Linux AMD64/x86_64 architecture. Used in debug mode and bundled in production builds for linux_amd64."
+        },
+        "source_script_linux_aarch64": {
+          "type": "string",
+          "description": "Path to the source script for Linux ARM64/aarch64 architecture. Used in debug mode and bundled in production builds for linux_aarch64."
+        },
+        "source_script_windows_amd64": {
+          "type": "string",
+          "description": "Path to the Windows AMD64 executable or script. Compiled Go/Rust configurations should point to the _windows_amd64.exe output; interpreted scripts may use the same source path as Linux when their runtime is installed on Windows."
+        },
+        "source_script_windows_amd64": {
+          "type": "string",
+          "description": "Path to the Windows AMD64 executable or script. Compiled Go/Rust configurations should point to the _windows_amd64.exe output; interpreted scripts may use the same source path as Linux when their runtime is installed on Windows."
+        },
+        "source_script_amd64": {
+          "type": "string",
+          "description": "Deprecated: Path to the source script for AMD64/x86_64 architecture. Retained for backwards compatibility; use source_script_linux_amd64 instead."
+        },
+        "source_script_arm64": {
+          "type": "string",
+          "description": "Deprecated: Path to the source script for ARM64/aarch64 architecture. Retained for backwards compatibility; use source_script_linux_aarch64 instead."
+        },
+        "source_type": {
+          "type": "string",
+          "enum": ["go", "bash", "python", "javascript", "powershell", "rust"],
+          "description": "The programming language/type of the source script. Determines the runtime dependencies and execution behavior. Currently supported types: 'go', 'bash', 'python', 'javascript', 'powershell', 'rust'."
+        },
+        "startup": {
+          "type": "string",
+          "description": "Initial application startup behavior. 'tray' starts minimized to system tray, 'window' or 'normal' starts with the main window visible. NOTE: 'tray' mode may not be supported on all platforms and will fallback to 'window' mode where not supported."
+        },
+        "tray_on_minimize": {
+          "type": "boolean",
+          "description": "When true, the application minimizes to the system tray instead of the taskbar when the window is minimized."
+        },
+        "instance_mode": {
+          "type": "string",
+          "description": "Controls how multiple instances are handled. 'replace' replaces an existing instance, 'duplicate' allows multiple instances, 'single' prevents a new instance from starting when one is already running."
+        },
+        "action_on_startup": {
+          "type": ["string", "null"],
+          "description": "Specifies which action to automatically execute when the application starts. Set to null to disable auto-execution. Must match an action's label."
+        },
+        "default_tab_on_startup": {
+          "type": ["string", "null"],
+          "description": "Specifies which tab to open by default when the application starts. Set to null to use the first tab. Must match an action's label or the tab label for the main menu specified below."
+        },
+        "close_after_startup_action": {
+          "type": "boolean",
+          "description": "When true and action_on_startup is set, the application will exit completely after the startup action completes execution."
+        },
+        "sudo": {
+          "type": "boolean",
+          "description": "When true, all script executions and file operations run with elevated privileges (sudo). Use with caution."
+        },
+        "theme": {
+          "type": "object",
+          "description": "Application window theme and dimensions configuration.",
+          "required": ["color", "width", "height"],
+          "properties": {
+            "color": {
+              "type": "string",
+              "description": "Application theme defaultcolor scheme. Accepted values: 'dark', 'light', or 'auto' (follows system preference)."
+            },
+            "width": {
+              "type": "integer",
+              "description": "Default width of the main application window in pixels."
+            },
+            "height": {
+              "type": "integer",
+              "description": "Default height of the main application window in pixels."
+            }
+          }
+        }
+      }
+    },
+    "mainMenuConfig": {
+      "type": "object",
+      "defaultSnippets": [
+        {
+          "label": "New Main Menu Boilerplate",
+          "body": {
+            "tab_label": "Main Menu",
+            "welcome_heading_label": null,
+            "info_label": null
+          }
+        }
+      ],
+      "required": ["tab_label"],
+      "properties": {
+        "tab_label": {
+          "type": "string",
+          "description": "The display label for the main menu tab in the application. Defaults to 'Main Menu' if not specified."
+        },
+        "welcome_heading_label": {
+          "type": ["string", "null"],
+          "description": "Heading text displayed at the top of the main menu tab. Set to null to hide the heading section."
+        },
+        "info_label": {
+          "type": ["string", "null"],
+          "description": "Informational/descriptive text displayed below the heading in the main menu tab. Set to null to hide the info section."
+        }
+      }
+    },
+    "deployConfig": {
+      "type": "object",
+      "defaultSnippets": [
+        {
+          "label": "New Deploy Boilerplate",
+          "body": {
+            "description": "Generated Qt GUI package staged by guify_my_script.",
+            "version": "0.0.1",
+            "release_number": "1",
+            "summary": "A GUI frontend for executing commands for ${1:script}",
+            "license": "MIT",
+            "maintainer": "gms",
+            "support_email": "maintainer@example.invalid",
+            "dependencies": [
+              {
+                "pacman": [],
+                "apt": [],
+                "dnf": []
+              }
+            ]
+          }
+        }
+      ],
+      "required": [
+        "description",
+        "version",
+        "release_number",
+        "summary",
+        "license",
+        "maintainer",
+        "support_email",
+        "dependencies"
+      ],
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Detailed description of the package. Used in package manifests (PKGBUILD, DEB control, RPM spec)."
+        },
+        "version": {
+          "type": "string",
+          "description": "Version number of the package in semantic versioning format (e.g., 1.0.0). Used in package metadata."
+        },
+        "release_number": {
+          "type": "string",
+          "description": "Release number for the package. Used in RPM spec files and as the pkgrel in Arch PKGBUILD files."
+        },
+        "summary": {
+          "type": "string",
+          "description": "Short summary/description of the package. Used in .desktop files and package metadata as the comment."
+        },
+        "license": {
+          "type": "string",
+          "description": "Software license for the package (e.g., MIT, GPL-3.0, Apache-2.0). Used in package manifests and metadata."
+        },
+        "maintainer": {
+          "type": "string",
+          "description": "Name of the package maintainer. Used in Debian control files and package metadata."
+        },
+        "support_email": {
+          "type": "string",
+          "format": "email",
+          "description": "Email address for support and maintainer contact. Used in Debian control files and package metadata."
+        },
+        "dependencies": {
+          "type": "array",
+          "description": "List of distribution-specific package dependencies. Each object in the array can specify dependencies for different package managers.",
+          "items": { "$ref": "#/$defs/deployDependency" }
+        }
+      }
+    },
+    "deployDependency": {
+      "type": "object",
+      "description": "Package dependencies for different Linux distribution package managers. Each property is an array of package names to install.",
+      "allOf": [
+        { "not": { "required": ["pacman", "arch"] } },
+        { "not": { "required": ["apt", "debian"] } },
+        { "not": { "required": ["dnf", "fedora"] } }
+      ],
+      "properties": {
+        "pacman": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Arch Linux package dependencies. gui_gen includes these in the generated Arch package dependency list; that list can include official repository packages and AUR packages (AUR packages use an AUR helper such as yay to build). Do not use together with 'arch'."
+        },
+        "arch": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Alias for 'pacman' for Arch Linux package dependencies, including AUR packages (AUR packages use an AUR helper such as yay to build). Do not use together with 'pacman'."
+        },
+        "apt": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Debian/Ubuntu package dependencies to include in generated packages. Do not use together with 'debian'."
+        },
+        "debian": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Alias for 'apt' for Debian/Ubuntu package dependencies. Do not use together with 'apt'."
+        },
+        "dnf": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Fedora/RHEL package dependencies to include in generated packages. Do not use together with 'fedora'."
+        },
+        "fedora": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Alias for 'dnf' for Fedora/RHEL package dependencies. Do not use together with 'dnf'."
+        }
+      }
+    },
+    "uiAction": {
+      "type": "object",
+      "defaultSnippets": [
+        {
+          "label": "New UIAction Boilerplate",
+          "body": {
+            "label": "${1:Action Title}",
+            "func": "${2:function_name}",
+            "execution_mode": "GUI",
+            "refresh_fields_on_tab_open": [],
+            "refresh_fields_on_completion": [],
+            "quick_launch": false,
+            "width": 600,
+            "sudo": false,
+            "exec_label": "Execute ${1}",
+            "exec_in_progress_label": "Executing ${1}...",
+            "stop_label": "Abort",
+            "advanced_menu": false,
+            "advanced_menu_tab_title": "",
+            "fields": []
+          }
+        }
+      ],
+      "required": [
+        "label",
+        "func",
+        "execution_mode",
+        "quick_launch",
+        "width",
+        "sudo",
+        "exec_label",
+        "exec_in_progress_label",
+        "stop_label",
+        "advanced_menu",
+        "advanced_menu_tab_title",
+        "fields"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": { "advanced_menu": { "const": true } }
+          },
+          "then": {
+            "properties": {
+              "advanced_menu_tab_title": { "minLength": 1 }
+            }
+          }
+        }
+      ],
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "Display name for this action. Used as the tab title and for quick launch identification. Must be unique across all actions."
+        },
+        "func": {
+          "type": "string",
+          "description": "The function or entry point name in the source script that this action triggers. Must match an exported function in the source script."
+        },
+        "execution_mode": {
+          "type": "string",
+          "default": "GUI",
+          "description": "Execution mode for this action. Accepted values: GUI (or g), GUI_COMMANDLINE (or gc), SILENT (or s), DETACHED_COMMANDLINE (or d), COMMANDLINE (or c). Case-insensitive.",
+          "anyOf": [
+            {
+              "enum": [
+                "GUI",
+                "GUI_COMMANDLINE",
+                "SILENT",
+                "DETACHED_COMMANDLINE",
+                "COMMANDLINE",
+                "g",
+                "gc",
+                "s",
+                "d",
+                "c"
+              ]
+            },
+            {
+              "pattern": "^([gG][uU][iI]|[gG][uU][iI]_[cC][oO][mM][mM][aA][nN][dD][lL][iI][nN][eE]|[sS][iI][lL][eE][nN][tT]|[dD][eE][tT][aA][cC][hH][eE][dD]_[cC][oO][mM][mM][aA][nN][dD][lL][iI][nN][eE]|[cC][oO][mM][mM][aA][nN][dD][lL][iI][nN][eE]|[gG]|[gG][cC]|[sS]|[dD]|[cC])$"
+            }
+          ]
+        },
+        "mode": {
+          "type": "string",
+          "description": "Deprecated alias for execution_mode. Do not define both mode and execution_mode on the same action."
+        },
+        "refresh_fields_on_tab_open": {
+          "type": ["array", "null"],
+          "items": { "type": "string" },
+          "description": "List of field names that should have their values refreshed from JSON endpoints when this action's tab is opened."
+        },
+        "refresh_fields_on_completion": {
+          "type": ["array", "null"],
+          "items": { "type": "string" },
+          "description": "List of field names that should have their values refreshed from JSON endpoints after this action completes execution."
+        },
+        "quick_launch": {
+          "type": "boolean",
+          "description": "When true, this action appears in the quick launch section of the main menu and can be triggered via --trigger command line argument."
+        },
+        "width": {
+          "type": "integer",
+          "description": "Width of the action's tab content area in pixels. Controls the size of the scrollable fields container."
+        },
+        "sudo": {
+          "type": "boolean",
+          "description": "When true, this action's function executes with elevated privileges (sudo). Overrides the global sudo setting for this specific action."
+        },
+        "exec_label": {
+          "type": "string",
+          "description": "Text displayed on the execute button for this action. Defaults to 'Execute {label}' if not specified."
+        },
+        "exec_in_progress_label": {
+          "type": "string",
+          "description": "Text displayed on the execute button while the action is running. Defaults to 'Executing {label}...' if not specified."
+        },
+        "stop_label": {
+          "type": "string",
+          "description": "Text displayed on the stop button for this action. Defaults to 'Abort' if not specified. Only visible for attached execution modes (GUI, GUI_COMMANDLINE, SILENT)."
+        },
+        "advanced_menu": {
+          "type": "boolean",
+          "default": false,
+          "description": "When true, render this action in the Advanced Settings dialog instead of the main window."
+        },
+        "advanced_menu_tab_title": {
+          "type": "string",
+          "default": "",
+          "description": "Advanced Settings tab title for this action. Required and non-empty when advanced_menu is true; may be shared by actions in this config."
+        },
+        "invoke_as_object": {
+          "type": "boolean",
+          "default": false,
+          "description": "When true, all positional arguments are combined into a single JSON object {arg_name: value} instead of separate arguments."
+        },
+        "fields": {
+          "type": "array",
+          "description": "List of UI fields (input controls) for this action. Fields are rendered in the action's tab and their values are passed to the function in the order that they are defined.",
+          "items": { "$ref": "#/$defs/uiField" }
+        }
+      }
+    },
+    "uiField": {
+      "type": "object",
+      "defaultSnippets": [
+        {
+          "label": "New TXT (Text) Field",
+          "description": "Scaffolds a standard text input field.",
+          "body": {
+            "name": "${1:Text Input}",
+            "parameter_position": null,
+            "field_type": "TXT",
+            "data_type": "string",
+            "default": "Initial Value",
+            "enabled": true,
+            "advanced_menu": false,
+            "json_endpoints": {
+              "array_endpoint": [],
+              "path_to_array": null,
+              "get_defaults_endpoint": [],
+              "path_to_default": null,
+              "get_enabled_endpoint": [],
+              "path_to_enabled": null
+            },
+            "refresh_fields_on_change": []
+          }
+        },
+        {
+          "label": "New DIR (Directory) Field",
+          "description": "Scaffolds a directory picker field.",
+          "body": {
+            "name": "${1:Directory Picker}",
+            "parameter_position": null,
+            "field_type": "DIR",
+            "data_type": "string",
+            "default": "/home",
+            "enabled": true,
+            "advanced_menu": false,
+            "json_endpoints": {
+              "array_endpoint": [],
+              "path_to_array": null,
+              "get_defaults_endpoint": [],
+              "path_to_default": null,
+              "get_enabled_endpoint": [],
+              "path_to_enabled": null
+            },
+            "refresh_fields_on_change": []
+          }
+        },
+        {
+          "label": "New FL (File) Picker Field",
+          "description": "Scaffolds a single file picker field.",
+          "body": {
+            "name": "${1:File Picker}",
+            "parameter_position": null,
+            "field_type": "FL",
+            "data_type": "string",
+            "default": "",
+            "file_types": ["txt"],
+            "enabled": true,
+            "advanced_menu": false,
+            "json_endpoints": {
+              "array_endpoint": [],
+              "path_to_array": null,
+              "get_defaults_endpoint": [],
+              "path_to_default": null,
+              "get_enabled_endpoint": [],
+              "path_to_enabled": null
+            },
+            "refresh_fields_on_change": []
+          }
+        },
+        {
+          "label": "New MFL (Multi-File) Picker Field",
+          "description": "Scaffolds a multi-file picker field.",
+          "body": {
+            "name": "${1:Multi-File Picker}",
+            "parameter_position": null,
+            "field_type": "MFL",
+            "data_type": "string",
+            "default": "",
+            "file_types": ["txt"],
+            "minimum": null,
+            "maximum": null,
+            "enabled": true,
+            "advanced_menu": false,
+            "json_endpoints": {
+              "array_endpoint": [],
+              "path_to_array": null,
+              "get_defaults_endpoint": [],
+              "path_to_default": null,
+              "get_enabled_endpoint": [],
+              "path_to_enabled": null
+            },
+            "refresh_fields_on_change": []
+          }
+        },
+        {
+          "label": "New FS (File Save) Picker Field",
+          "description": "Scaffolds a save file picker field.",
+          "body": {
+            "name": "${1:Save File Picker}",
+            "parameter_position": null,
+            "field_type": "FS",
+            "data_type": "string",
+            "default": "",
+            "file_types": ["txt"],
+            "enabled": true,
+            "advanced_menu": false,
+            "json_endpoints": {
+              "array_endpoint": [],
+              "path_to_array": null,
+              "get_defaults_endpoint": [],
+              "path_to_default": null,
+              "get_enabled_endpoint": [],
+              "path_to_enabled": null
+            },
+            "refresh_fields_on_change": []
+          }
+        },
+        {
+          "label": "New CB (Combo Box) Field",
+          "description": "Scaffolds a single-select dropdown field.",
+          "body": {
+            "name": "${1:Combo Box}",
+            "parameter_position": null,
+            "field_type": "CB",
+            "data_type": "string",
+            "options": ["Option1", "Option2", "Option3"],
+            "default": "Option1",
+            "enabled": true,
+            "advanced_menu": false,
+            "json_endpoints": {
+              "array_endpoint": [],
+              "path_to_array": null,
+              "get_defaults_endpoint": [],
+              "path_to_default": null,
+              "get_enabled_endpoint": [],
+              "path_to_enabled": null
+            },
+            "refresh_fields_on_change": []
+          }
+        },
+        {
+          "label": "New CK (Checkbox) Field",
+          "description": "Scaffolds a boolean checkbox field.",
+          "body": {
+            "name": "${1:Checkbox}",
+            "parameter_position": null,
+            "field_type": "CK",
+            "data_type": "bool",
+            "default": "0",
+            "enabled": true,
+            "advanced_menu": false,
+            "json_endpoints": {
+              "array_endpoint": [],
+              "path_to_array": null,
+              "get_defaults_endpoint": [],
+              "path_to_default": null,
+              "get_enabled_endpoint": [],
+              "path_to_enabled": null
+            },
+            "refresh_fields_on_change": []
+          }
+        },
+        {
+          "label": "New FD (File/Directory) Picker Field",
+          "description": "Scaffolds a hybrid file or directory picker.",
+          "body": {
+            "name": "${1:File or Directory Picker}",
+            "parameter_position": null,
+            "field_type": "FD",
+            "data_type": "string",
+            "default": "",
+            "file_types": ["txt"],
+            "enabled": true,
+            "advanced_menu": false,
+            "json_endpoints": {
+              "array_endpoint": [],
+              "path_to_array": null,
+              "get_defaults_endpoint": [],
+              "path_to_default": null,
+              "get_enabled_endpoint": [],
+              "path_to_enabled": null
+            },
+            "refresh_fields_on_change": []
+          }
+        },
+        {
+          "label": "New MCB (Multi-Combo Box) Field",
+          "description": "Scaffolds a multi-select dropdown field.",
+          "body": {
+            "name": "${1:Multi-Combo Box}",
+            "parameter_position": null,
+            "field_type": "MCB",
+            "data_type": "list",
+            "options": ["Option1", "Option2", "Option3"],
+            "default": ["Option2", "Option3"],
+            "minimum": "0",
+            "maximum": "0",
+            "enabled": true,
+            "advanced_menu": false,
+            "json_endpoints": {
+              "array_endpoint": [],
+              "path_to_array": null,
+              "get_defaults_endpoint": [],
+              "path_to_default": null,
+              "get_enabled_endpoint": [],
+              "path_to_enabled": null
+            },
+            "refresh_fields_on_change": []
+          }
+        },
+        {
+          "label": "New LTXT (Long Text) Field",
+          "description": "Scaffolds a multi-line text area field.",
+          "body": {
+            "name": "${1:Long Text}",
+            "parameter_position": null,
+            "field_type": "LTXT",
+            "data_type": "string",
+            "default": "Initial Long Text Value",
+            "auto_height": true,
+            "min_height": 240,
+            "enabled": true,
+            "advanced_menu": false,
+            "json_endpoints": {
+              "array_endpoint": [],
+              "path_to_array": null,
+              "get_defaults_endpoint": [],
+              "path_to_default": null,
+              "get_enabled_endpoint": [],
+              "path_to_enabled": null
+            },
+            "refresh_fields_on_change": []
+          }
+        },
+        {
+          "label": "New TIME Field",
+          "description": "Scaffolds a time picker field.",
+          "body": {
+            "name": "${1:Time Picker}",
+            "parameter_position": null,
+            "field_type": "TIME",
+            "data_type": "string",
+            "default": "12:00:00",
+            "minimum": null,
+            "maximum": null,
+            "enabled": true,
+            "advanced_menu": false,
+            "json_endpoints": {
+              "array_endpoint": [],
+              "path_to_array": null,
+              "get_defaults_endpoint": [],
+              "path_to_default": null,
+              "get_enabled_endpoint": [],
+              "path_to_enabled": null
+            },
+            "refresh_fields_on_change": []
+          }
+        },
+        {
+          "label": "New DATE Field",
+          "description": "Scaffolds a date picker field.",
+          "body": {
+            "name": "${1:Date Picker}",
+            "parameter_position": null,
+            "field_type": "DATE",
+            "data_type": "string",
+            "default": "2026-01-01",
+            "minimum": null,
+            "maximum": null,
+            "enabled": true,
+            "advanced_menu": false,
+            "json_endpoints": {
+              "array_endpoint": [],
+              "path_to_array": null,
+              "get_defaults_endpoint": [],
+              "path_to_default": null,
+              "get_enabled_endpoint": [],
+              "path_to_enabled": null
+            },
+            "refresh_fields_on_change": []
+          }
+        },
+        {
+          "label": "New NUM (Number) Field",
+          "description": "Scaffolds a numeric input field.",
+          "body": {
+            "name": "${1:Number Input}",
+            "parameter_position": null,
+            "field_type": "NUM",
+            "data_type": "int",
+            "default": "0",
+            "minimum": null,
+            "maximum": null,
+            "decimal_places": "0",
+            "enabled": true,
+            "advanced_menu": false,
+            "json_endpoints": {
+              "array_endpoint": [],
+              "path_to_array": null,
+              "get_defaults_endpoint": [],
+              "path_to_default": null,
+              "get_enabled_endpoint": [],
+              "path_to_enabled": null
+            },
+            "refresh_fields_on_change": []
+          }
+        }
+      ],
+      "required": [
+        "name",
+        "data_type",
+        "enabled",
+        "advanced_menu",
+        "json_endpoints",
+        "refresh_fields_on_change",
+        "parameter_position"
+      ],
+      "anyOf": [
+        { "required": ["field_type"] },
+        { "required": ["type"] }
+      ],
+      "not": {
+        "required": ["type", "field_type"]
+      },
+      "allOf": [
+        {
+          "if": {
+            "anyOf": [
+              {
+                "required": ["field_type"],
+                "properties": { "field_type": { "enum": ["CB", "MCB"] } }
+              },
+              {
+                "required": ["type"],
+                "properties": { "type": { "enum": ["CB", "MCB"] } }
+              }
+            ]
+          },
+          "then": {
+            "required": ["options"]
+          }
+        },
+        {
+          "if": {
+            "anyOf": [
+              {
+                "required": ["field_type"],
+                "properties": { "field_type": { "enum": ["MCB", "MFL", "TIME", "DATE", "NUM"] } }
+              },
+              {
+                "required": ["type"],
+                "properties": { "type": { "enum": ["MCB", "MFL", "TIME", "DATE", "NUM"] } }
+              }
+            ]
+          },
+          "then": {
+            "required": ["minimum", "maximum"]
+          },
+          "else": {
+            "not": {
+              "anyOf": [
+                { "required": ["minimum"] },
+                { "required": ["maximum"] }
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "anyOf": [
+              {
+                "required": ["field_type"],
+                "properties": { "field_type": { "const": "NUM" } }
+              },
+              {
+                "required": ["type"],
+                "properties": { "type": { "const": "NUM" } }
+              }
+            ]
+          },
+          "then": {
+            "required": ["decimal_places"],
+            "properties": {
+              "default": {
+                "type": "string",
+                "pattern": "^-?\\d+(\\.\\d+)?$"
+              },
+              "minimum": {
+                "type": ["string", "null"],
+                "pattern": "^-?\\d+(\\.\\d+)?$"
+              },
+              "maximum": {
+                "type": ["string", "null"],
+                "pattern": "^-?\\d+(\\.\\d+)?$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "anyOf": [
+              {
+                "required": ["field_type"],
+                "properties": { "field_type": { "const": "MCB" } }
+              },
+              {
+                "required": ["type"],
+                "properties": { "type": { "const": "MCB" } }
+              }
+            ]
+          },
+          "then": {
+            "properties": {
+              "default": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "minimum": {
+                "type": ["string", "null"],
+                "pattern": "^\\d+$"
+              },
+              "maximum": {
+                "type": ["string", "null"],
+                "pattern": "^\\d+$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "anyOf": [
+              {
+                "required": ["field_type"],
+                "properties": { "field_type": { "const": "MFL" } }
+              },
+              {
+                "required": ["type"],
+                "properties": { "type": { "const": "MFL" } }
+              }
+            ]
+          },
+          "then": {
+            "properties": {
+              "minimum": {
+                "type": ["string", "null"],
+                "pattern": "^\\d+$"
+              },
+              "maximum": {
+                "type": ["string", "null"],
+                "pattern": "^\\d+$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "anyOf": [
+              {
+                "required": ["field_type"],
+                "properties": { "field_type": { "const": "DATE" } }
+              },
+              {
+                "required": ["type"],
+                "properties": { "type": { "const": "DATE" } }
+              }
+            ]
+          },
+          "then": {
+            "properties": {
+              "default": {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+              },
+              "minimum": {
+                "type": ["string", "null"],
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+              },
+              "maximum": {
+                "type": ["string", "null"],
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "anyOf": [
+              {
+                "required": ["field_type"],
+                "properties": { "field_type": { "const": "TIME" } }
+              },
+              {
+                "required": ["type"],
+                "properties": { "type": { "const": "TIME" } }
+              }
+            ]
+          },
+          "then": {
+            "properties": {
+              "default": {
+                "type": "string",
+                "pattern": "^\\d{2}:\\d{2}:\\d{2}$"
+              },
+              "minimum": {
+                "type": ["string", "null"],
+                "pattern": "^\\d{2}:\\d{2}:\\d{2}$"
+              },
+              "maximum": {
+                "type": ["string", "null"],
+                "pattern": "^\\d{2}:\\d{2}:\\d{2}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "anyOf": [
+              {
+                "required": ["field_type"],
+                "properties": { "field_type": { "const": "CK" } }
+              },
+              {
+                "required": ["type"],
+                "properties": { "type": { "const": "CK" } }
+              }
+            ]
+          },
+          "then": {
+            "properties": {
+              "default": {
+                "type": "string",
+                "enum": ["0", "1"]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "anyOf": [
+              {
+                "required": ["field_type"],
+                "properties": {
+                  "field_type": {
+                    "enum": ["CB", "TXT", "DIR", "FL", "MFL", "FS", "FD", "LTXT"]
+                  }
+                }
+              },
+              {
+                "required": ["type"],
+                "properties": {
+                  "type": {
+                    "enum": ["CB", "TXT", "DIR", "FL", "MFL", "FS", "FD", "LTXT"]
+                  }
+                }
+              }
+            ]
+          },
+          "then": {
+            "properties": {
+              "default": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "anyOf": [
+              {
+                "required": ["field_type"],
+                "properties": { "field_type": { "enum": ["FL", "MFL", "FS", "FD"] } }
+              },
+              {
+                "required": ["type"],
+                "properties": { "type": { "enum": ["FL", "MFL", "FS", "FD"] } }
+              }
+            ]
+          },
+          "then": {
+            "required": ["file_types"]
+          }
+        },
+        {
+          "if": {
+            "anyOf": [
+              {
+                "required": ["field_type"],
+                "properties": { "field_type": { "const": "LTXT" } }
+              },
+              {
+                "required": ["type"],
+                "properties": { "type": { "const": "LTXT" } }
+              }
+            ]
+          },
+          "then": {
+            "required": ["auto_height", "min_height"]
+          }
+        }
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Display label for this field in the UI. Used as the field identifier and in the argument passing to the function."
+        },
+        "parameter_position": {
+          "type": ["integer", "null"],
+          "description": "Script argument ordering priority. Non-null positions are passed first in ascending numeric order; gaps are allowed. Fields with null positions trail after in their JSON order."
+        },
+        "arg_name": {
+          "type": "string",
+          "description": "Original parameter/argument name from the source script (e.g. JavaScript identifier used in object destructuring calls)."
+        },
+        "field_type": {
+          "type": "string",
+          "description": "UI field widget type. Accepted values: TXT (Single-line text input), DIR (Directory picker), FL (Single file picker), MFL (Multi-file picker), FS (Save file picker), CB (Combo box / dropdown), CK (Checkbox boolean toggle), FD (File or directory hybrid picker), MCB (Multi-select combo box), LTXT (Multi-line text area), TIME (Time picker), DATE (Date picker), NUM (Numeric input).",
+          "enum": [
+            "TXT", "DIR", "FL", "MFL", "FS", "CB", "CK", "FD", "MCB", "LTXT", "TIME", "DATE", "NUM"
+          ],
+          "enumDescriptions": [
+            "TXT: Single-line text input field",
+            "DIR: Directory picker dialog",
+            "FL: Single file picker dialog",
+            "MFL: Multi-file picker dialog",
+            "FS: Save file picker dialog",
+            "CB: Single-select combo box / dropdown",
+            "CK: Checkbox boolean toggle",
+            "FD: Hybrid file or directory picker dialog",
+            "MCB: Multi-select combo box dropdown",
+            "LTXT: Multi-line text area",
+            "TIME: Time picker (HH:MM:SS)",
+            "DATE: Date picker (YYYY-MM-DD)",
+            "NUM: Numeric input with decimal precision"
+          ]
+        },
+        "type": {
+          "type": "string",
+          "description": "Deprecated alias for field_type. Do not define both type and field_type on the same field.",
+          "enum": [
+            "TXT", "DIR", "FL", "MFL", "FS", "CB", "CK", "FD", "MCB", "LTXT", "TIME", "DATE", "NUM"
+          ],
+          "enumDescriptions": [
+            "TXT: Single-line text input field",
+            "DIR: Directory picker dialog",
+            "FL: Single file picker dialog",
+            "MFL: Multi-file picker dialog",
+            "FS: Save file picker dialog",
+            "CB: Single-select combo box / dropdown",
+            "CK: Checkbox boolean toggle",
+            "FD: Hybrid file or directory picker dialog",
+            "MCB: Multi-select combo box dropdown",
+            "LTXT: Multi-line text area",
+            "TIME: Time picker (HH:MM:SS)",
+            "DATE: Date picker (YYYY-MM-DD)",
+            "NUM: Numeric input with decimal precision"
+          ]
+        },
+        "data_type": {
+          "type": "string",
+          "default": "string",
+          "description": "The data type for this field's value. Common types include: 'string', 'int', 'float', 'bool', 'list'. Used for type conversions in type hinted programming languages. NOTE: For non-typed languages everything is passed as a string so this would be informational only and would not enforce type checking."
+        },
+        "options": {
+          "type": "array",
+          "description": "Available options for dropdown/combo box fields (CB, MCB). For CB: array of strings. For MCB: array of strings where multiple can be selected."
+        },
+        "default": {
+          "description": "Default value for this field. Type and format depend on the field_type. For checkboxes (CK), use '0' or '1'. For dates (DATE), use YYYY-MM-DD format."
+        },
+        "minimum": {
+          "type": ["string", "null"],
+          "default": "0|2026-01-01|12:00:00",
+          "description": "Minimum allowed value for this field. Format depends on field_type: numeric for NUM, date string for DATE (YYYY-MM-DD), time string for TIME (HH:MM:SS), integer for MFL/MCB.",
+          "defaultSnippets": [
+            {
+              "label": "minimum (String)",
+              "description": "Insert minimum numeric bound",
+              "body": "\"${1:0}\""
+            }
+          ]
+        },
+        "maximum": {
+          "type": ["string", "null"],
+          "default": "0|2026-01-01|12:00:00",
+          "description": "Maximum allowed value for this field. Format depends on field_type: numeric for NUM, date string for DATE (YYYY-MM-DD), time string for TIME (HH:MM:SS), integer for MFL/MCB.",
+          "defaultSnippets": [
+            {
+              "label": "maximum (String)",
+              "description": "Insert maximum numeric bound",
+              "body": "\"${1:100}\""
+            }
+          ]
+        },
+        "decimal_places": {
+          "type": ["string", "null"],
+          "pattern": "^\\d+$",
+          "default": "0",
+          "description": "Number of decimal places allowed for NUM field types. Must be a non-negative integer string.",
+          "defaultSnippets": [
+            {
+              "label": "decimal_places",
+              "description": "Set decimal precision",
+              "body": "\"${1:2}\""
+            }
+          ]
+        },
+        "enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "When true, the field is interactive and its value is passed to the function. When false, the field is disabled and grayed out in the UI."
+        },
+        "advanced_menu": {
+          "type": "boolean",
+          "default": false,
+          "description": "When true, this field is hidden behind an 'Advanced Settings' toggle in the action tab, reducing clutter for power-user options."
+        },
+        "auto_height": {
+          "type": "boolean",
+          "default": true,
+          "description": "For LTXT (long text) fields only. When true, the field height expands automatically based on content. When false, uses min_height as fixed height."
+        },
+        "min_height": {
+          "type": "integer",
+          "default": 240,
+          "description": "For LTXT (long text) fields only. Minimum height in pixels when auto_height is enabled, or fixed height when auto_height is disabled."
+        },
+        "file_types": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": ["txt"],
+          "description": "File extensions filter for file picker fields (FL, MFL, FS, FD). Array of extension strings without dots (e.g., ['txt', 'png', 'jpg'])."
+        },
+        "json_endpoints": {
+          "$ref": "#/$defs/jsonEndpoints",
+          "description": "JSON endpoint configuration for dynamic field data. Allows this field to fetch its options, defaults, and enabled state from external or script-provided JSON data."
+        },
+        "refresh_fields_on_change": {
+          "type": ["array", "null"],
+          "items": { "type": "string" },
+          "default": [],
+          "description": "List of field names that should have their values refreshed from JSON endpoints when this field's value changes. Enables cascading field updates."
+        }
+      }
+    },
+    "jsonEndpoints": {
+      "type": "object",
+      "description": "JSON endpoint configuration for dynamic field data. Allows fields to fetch their options, defaults, and enabled state from external or script-provided JSON data. curly braces {} in the endpoint function name or parameters are replaced with the specified field's value when making the call.",
+      "properties": {
+        "array_endpoint": {
+          "type": ["array", "null"],
+          "default": [],
+          "description": "Gets an array of options for CB or MCB fields. The returned array replaces the static 'options' property. 1st value in the array indicates the function name to call. 2nd parameter onwards are input parameters to be passed to the function."
+        },
+        "path_to_array": {
+          "type": ["string", "null"],
+          "default": null,
+          "description": "JSON path (e.g., 'actions/[name]') to extract an array of options from the JSON response of array_endpoint functions. Used with array_endpoint to locate the options within the returned JSON structure. using [] notation around a json key indicates that this is a property name within an array of complex objects and that it should return an array of values for that property from all objects in the array."
+        },
+        "get_defaults_endpoint": {
+          "type": ["array", "null"],
+          "default": [],
+          "description": "Gets the default value for this field. The returned value is used as the field's default if no static default is set. 1st value in the array indicates the function name to call. 2nd parameter onwards are input parameters to be passed to the function."
+        },
+        "path_to_default": {
+          "type": ["string", "null"],
+          "default": null,
+          "description": "JSON path to extract the default value from the JSON response of get_defaults_endpoint functions. Used with get_defaults_endpoint to locate the value within the returned JSON structure."
+        },
+        "get_enabled_endpoint": {
+          "type": ["array", "null"],
+          "default": [],
+          "description": "Gets a boolean value indicating if this field should be enabled. The returned value controls the field's enabled state. 1st value in the array indicates the function name to call. 2nd parameter onwards are input parameters to be passed to the function."
+        },
+        "path_to_enabled": {
+          "type": ["string", "null"],
+          "default": null,
+          "description": "JSON path to extract the enabled boolean value from the JSON response of get_enabled_endpoint functions. Used with get_enabled_endpoint to locate the value within the returned JSON structure."
+        }
+      }
+    }
+  }
+}
